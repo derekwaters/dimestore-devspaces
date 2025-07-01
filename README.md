@@ -26,3 +26,12 @@ Turning a RHEL box into a multi-container separated dev server
 1. The RemapUsers=keep-id ensures that uids used inside the container are the same as on the host, so that reads/writes to the mounted folder operate as the launching user.
 2. In root mode, the container runs as the 'root' user inside the container, but maps to the launching user on the host.
 3. In rootless mode, the container runs as the launching user from the host and does not have 'root' access to the container.
+
+## Building images
+Containerfile definitions are provided for more secured container images (this is a work in progress!)
+
+For example, you can build the secured ansible-dev-tools image with:
+
+`podman build -f build/secure-ansible-dev-tools.Containerfile -t my_image_repo/ansible-secure-dev-tools:latest`
+
+`podman push my_image_repo/ansible-secure-dev-tools:latest`
