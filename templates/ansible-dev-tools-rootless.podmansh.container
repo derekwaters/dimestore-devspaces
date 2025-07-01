@@ -7,10 +7,19 @@ Image=registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:
 ContainerName=podmansh
 
 RemapUsers=keep-id
-RemapUidRanges=%u
-RemapGidRanges=%u
 User=%U
 Group=%G
+
+AddCapability=CAP_MKNOD
+AddCapability=NET_ADMIN
+AddCapability=SYS_ADMIN
+AddCapability=SYS_RESOURCE
+PodmanArgs="--device=/dev/fuse"
+PodmanArgs=--security-opt="seccomp=unconfined"
+PodmanArgs=--security-opt="label=disable"
+PodmanArgs=--security-opt="apparmor=unconfined"
+PodmanArgs=--security-opt="unmask=/sys/fs/cgroup"
+
 
 RunInit=yes
 Exec=sleep infinity

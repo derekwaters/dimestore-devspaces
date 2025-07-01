@@ -5,7 +5,16 @@ After=local-fs.target
 [Container]
 Image=registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest
 ContainerName=podmansh
+AddCapability=CAP_MKNOD
+AddCapability=NET_ADMIN
+AddCapability=SYS_ADMIN
+AddCapability=SYS_RESOURCE
 PodmanArgs="--user=root"
+PodmanArgs="--device=/dev/fuse"
+PodmanArgs=--security-opt="seccomp=unconfined"
+PodmanArgs=--security-opt="label=disable"
+PodmanArgs=--security-opt="apparmor=unconfined"
+PodmanArgs=--security-opt="unmask=/sys/fs/cgroup"
 RunInit=yes
 Exec=sleep infinity
 
