@@ -1,0 +1,19 @@
+[Unit]
+Description=Secure Ansible Dev Container
+After=local-fs.target
+
+[Container]
+Image=registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest
+ContainerName=podmansh
+RemapUsers=keep-id
+PodmanArgs="--user=root"
+RunInit=yes
+Exec=sleep infinity
+
+Volume=%h/data:/workdir:Z
+
+[Service]
+ExecStartPre=/usr/bin/mkdir -p %h/data
+
+[Install]
+RequiredBy=default.target
