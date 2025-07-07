@@ -6,10 +6,6 @@ After=local-fs.target
 Image=registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest
 ContainerName=podmansh
 
-RemapUsers=keep-id
-User=%U
-Group=%G
-
 AddCapability=CAP_MKNOD
 AddCapability=NET_ADMIN
 AddCapability=SYS_ADMIN
@@ -20,6 +16,12 @@ PodmanArgs=--security-opt="label=disable"
 PodmanArgs=--security-opt="apparmor=unconfined"
 PodmanArgs=--security-opt="unmask=/sys/fs/cgroup"
 
+# NOTE: This mapping allows the container user (podman, uid/gid=1000) to
+# map to the host's SSH user, allowing podman to read and write the mounted
+# volume correctly, while still being able to do everything the podman user
+# can in the container, including podman-in-podman.
+#
+PodmanArgs=--userns="keep-id:uid=1000,gid=1000"
 
 RunInit=yes
 Exec=sleep infinity
