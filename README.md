@@ -12,7 +12,7 @@ Turning a RHEL box into a multi-container separated dev server
     `/etc/containers/systemd/users/${USER_ID}/podmansh.container`
 
 3. Use one of the included templates to define the contents of the file.
-4. Now create a user on the RHEL box:
+4. Now create a user on the RHEL box, setting their default login shell to podmansh:
 
     `sudo useradd -s /usr/bin/podmansh <username>`
 
