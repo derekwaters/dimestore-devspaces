@@ -1,3 +1,5 @@
+#!/usr/sbin/nft -f
+
 table inet filter {
         set whitelist_ips {
                 type ipv4_addr
