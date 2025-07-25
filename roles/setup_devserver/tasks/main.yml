@@ -1,0 +1,28 @@
+#SPDX-License-Identifier: MIT-0
+---
+- name: Configure podmansh
+  ansible.builtin.template:
+    src: templates/podmansh.container
+    dest: /etc/containers/systemd/podmansh.container
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create groups
+  ansible.builtin.group:
+
+  loop:
+    "{{ __setup_devserver_teams }}"
+
+- name: Create users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: present
+    groups: "{{ item.team }}"
+    append: true
+    shell: "/usr/bin/podmansh"
+    password: "{{ item.password | password_hash('sha512', 'dummysalt') }}"
+  loop:
+    "{{ __setup_devserver_devusers }}"
+
+- name: Add nftables config
