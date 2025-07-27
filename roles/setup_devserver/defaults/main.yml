@@ -15,7 +15,7 @@ __setup_devserver_teams:
       - 192.168.10.1
       - 192.168.10.2
   - name: wintel
-    whitelist: 
+    whitelist:
       - 192.168.20.1
       - 192.168.20.2
 __setup_devserver_devcontainer: registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest

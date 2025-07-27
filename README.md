@@ -35,3 +35,13 @@ For example, you can build the secured ansible-dev-tools image with:
 `podman build -f build/secure-ansible-dev-tools.Containerfile -t my_image_repo/ansible-secure-dev-tools:latest`
 
 `podman push my_image_repo/ansible-secure-dev-tools:latest`
+
+
+## Running a local container registry for testing
+podman run -d -p 5000:5000 --name registry registry:latest
+podman tag my-dev-container:tag localhost:5000/my-dev-container:tag
+cat > /etc/containers/registries.conf.d/myregistry.conf <<EOF
+[[registry]]
+location = "localhost:5000"
+insecure = true
+podman push --remove-signatures localhost:5000/my-dev-container:tag

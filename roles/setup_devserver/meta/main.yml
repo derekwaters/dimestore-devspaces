@@ -1,11 +1,10 @@
-#SPDX-License-Identifier: MIT-0
 galaxy_info:
   author: Derek Waters
   description: architect
   company: Red Hat
 
   license: BSD-3-Clause
-  min_ansible_version: 2.1
+  min_ansible_version: "2.1"
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.
   # min_ansible_container_version:

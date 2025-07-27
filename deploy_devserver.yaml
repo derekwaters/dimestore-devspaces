@@ -1,0 +1,6 @@
+---
+- name: Setup Development Server
+  hosts: all
+  become: true
+  roles:
+    - setup_devserver
