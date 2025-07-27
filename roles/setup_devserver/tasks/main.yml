@@ -2,7 +2,7 @@
 - name: Configure podmansh
   ansible.builtin.template:
     src: templates/podmansh.container
-    dest: /etc/containers/systemd/podmansh.container
+    dest: /etc/containers/systemd/users/podmansh.container
     owner: root
     group: root
     mode: '0644'

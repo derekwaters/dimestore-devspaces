@@ -5,7 +5,7 @@ Turning a RHEL box into a multi-container separated dev server
 1. Start with a RHEL box. You'll have podmansh available out of the box
 2. Create a quadlet container definition for podmansh, either at a system level:
 
-    `/etc/containers/systemd/podmansh.container`
+    `/etc/containers/systemd/users/podmansh.container`
 
     or at a per-user level:
 
