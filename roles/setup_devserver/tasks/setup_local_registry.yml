@@ -1,0 +1,29 @@
+---
+- name: Configure registry quadlet
+  ansible.builtin.template:
+    src: templates/imageregistry.container
+    dest: /etc/containers/systemd/imageregistry.container
+    owner: root
+    group: root
+    mode: '0644'
+  vars:
+    registry_image: "{{ __setup_devserver_local_registry.image }}"
+    registry_port: "{{ __setup_devserver_local_registry.port }}"
+
+- name: Reload daemons
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    name: imageregistry
+    state: started
+
+- name: Allow insecure access to local registry
+  ansible.builtin.template:
+    src: templates/localregistry.conf
+    dest: /etc/containers/registries.conf.d/localregistry.conf
+    owner: root
+    group: root
+    mode: '0644'
+  vars:
+    registry_port: "{{ __setup_devserver_local_registry.port }}"
+
+
