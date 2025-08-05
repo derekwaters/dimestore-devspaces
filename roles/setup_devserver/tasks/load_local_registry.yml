@@ -1,0 +1,31 @@
+---
+- name: Set the remote image path
+  ansible.builtin.set_fact:
+    __setup_devserver_remote_devcontainer: "{{ __setup_devserver_devcontainer.registry_name }}/{{ __setup_devserver_devcontainer.registry_image }}"
+
+- name: Set the local image path
+  ansible.builtin.set_fact:
+    __setup_devserver_local_devcontainer: "localhost:{{ __setup_devserver_local_registry.port }}/{{ __setup_devserver_devcontainer.registry_image }}"
+
+- name: Pull the source image
+  containers.podman.podman_image:
+    name: "{{ __setup_devserver_remote_devcontainer }}"
+    username: "{{ __setup_devserver_devcontainer.registry_username }}"
+    password: "{{ __setup_devserver_devcontainer.registry_password }}"
+    pull: true
+    state: present
+
+- name: Tag the source image
+  containers.podman.podman_tag:
+    image: "{{ __setup_devserver_remote_devcontainer }}"
+    target_names:
+      - "{{ __setup_devserver_local_devcontainer }}"
+
+- name: Push the image to the local registry
+  containers.podman.podman_image:
+    name: "{{ __setup_devserver_local_devcontainer }}"
+    push: true
+    push_args:
+      dest: "{{ __setup_devserver_local_devcontainer }}"
+      remove_signatures: true
+    validate_certs: false

@@ -1,0 +1,10 @@
+[Unit]
+Description=Local OCI Image Registry
+After=local-fs.target
+
+[Container]
+Image={{ registry_image | default("docker.io/registry:latest") }}
+PublishPort={{ registry_port | default("5000") }}:5000
+
+[Install]
+WantedBy=multi-user.target default.target

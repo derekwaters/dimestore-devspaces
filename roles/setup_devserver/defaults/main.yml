@@ -18,4 +18,11 @@ __setup_devserver_teams:
     whitelist:
       - 192.168.20.1
       - 192.168.20.2
-__setup_devserver_devcontainer: registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest
+__setup_devserver_devcontainer:
+  registry_name: registry.redhat.io
+  registry_image: ansible-automation-platform-25/ansible-dev-tools-rhel8:latest
+  registry_username: "{{ registry_username }}"
+  registry_password: "{{ registry_password }}"
+__setup_devserver_local_registry:
+  image: docker.io/registry:latest
+  port: 5000
