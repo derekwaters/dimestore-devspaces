@@ -45,6 +45,7 @@
     group: root
     mode: '0644'
   vars:
+    whitelist_name: "{{ item.name }}"
     whitelist_ips: "{{ item.whitelist | join(',') }}"
     whitelist_gid: "{{ __setup_devserver_group_lookup[item.name][1] }}"
   loop:

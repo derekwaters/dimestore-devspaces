@@ -1,14 +1,14 @@
 #!/usr/sbin/nft -f
 
 table inet filter {{ '{' }}
-        set whitelist_ips {{ '{' }}
+        set {{ whitelist_name }}_whitelist_ips {{ '{' }}
                 type ipv4_addr
                 elements = {{ '{' ~ whitelist_ips ~ '}' }}
         {{ '}' }}
 
-        chain output {{ '{' }}
+        chain output_{{ whitelist_name }} {{ '{' }}
                 type filter hook output priority filter; policy accept;
-                ip daddr @whitelist_ips meta skgid {{ whitelist_gid }} accept
+                ip daddr @{{ whitelist_name }}_whitelist_ips meta skgid {{ whitelist_gid }} accept
                 meta skgid {{ whitelist_gid }} drop
                 accept
         {{ '}' }}
