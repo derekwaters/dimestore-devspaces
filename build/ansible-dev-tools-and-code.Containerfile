@@ -8,14 +8,14 @@ RUN microdnf install -y \
 	python3 \
 	python3-pip.noarch \
 	git \
-	vim
-
-RUN curl -fOL https://github.com/coder/code-server/releases/download/v4.101.2/code-server-4.101.2-amd64.rpm && \
+	vim && \
+	curl -fOL https://github.com/coder/code-server/releases/download/v4.101.2/code-server-4.101.2-amd64.rpm && \
     rpm -i code-server-4.101.2-amd64.rpm && \
-    rm code-server-4.101.2-amd64.rpm
+    rm code-server-4.101.2-amd64.rpm && \
+	microdnf clean all
 
 COPY files/code-server-config.yaml /home/podman/.config/code-server/config.yaml
 
 USER podman
 
-ENTRYPOINT "/usr/bin/code-server"
+ENTRYPOINT ["/usr/bin/code-server"]
