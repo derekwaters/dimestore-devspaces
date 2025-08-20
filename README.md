@@ -45,3 +45,37 @@ cat > /etc/containers/registries.conf.d/myregistry.conf <<EOF
 location = "localhost:5000"
 insecure = true
 podman push --remove-signatures localhost:5000/my-dev-container:tag
+
+## Appendix - Testing podman command lines for dev tools container
+`podman run -it --rm --userns=keep-id -v ~/workdir:/workdir:Z,U --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+-> failed to ansible-navigator, and borked the workdir
+
+`podman run -it --rm --userns=keep-id -v ~/workdir:/workdir:Z --uidmap 1000:@1001:1 --gidmap 1000:@1001:1 --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+-> failed to use that userns
+
+`podman run -it --rm --userns=keep-id -v ~/workdir:/workdir:Z --uidmap 1000:@1001:1 --gidmap 1000:@1001:1 --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+-> failed to crun
+
+`podman run -it --rm --userns=keep-id --user 1000:1000 -v ~/workdir:/workdir:Z,U --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+-> failed to newuidmap, workdir is borked
+
+`podman run -it --rm --userns=keep-id --cap-add=CAP_MKNOD --cap-add=NET_ADMIN --cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --device=/dev/fuse --security-opt="seccomp=unconfined" \
+    --security-opt="label=disable" --security-opt="apparmor=unconfined" --security-opt="unmask=/sys/fs/cgroup" \
+    --user 1000:1000 -v ~/workdir:/workdir:Z --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+-> failed to newuidmap
+
+`podman run -it --rm --userns=keep-id --cap-add=CAP_MKNOD --cap-add=NET_ADMIN --cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --device=/dev/fuse --security-opt="seccomp=unconfined" \
+    --security-opt="label=disable" --security-opt="apparmor=unconfined" --security-opt="unmask=/sys/fs/cgroup" \
+    -v ~/workdir:/workdir:Z --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+-> Failed to write to workdir
+
+`podman run -it --rm --userns=keep-id --user 1001:1001 --cap-add=CAP_MKNOD --cap-add=NET_ADMIN --cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --device=/dev/fuse --security-opt="seccomp=unconfined" \
+    --security-opt="label=disable" --security-opt="apparmor=unconfined" --security-opt="unmask=/sys/fs/cgroup" \
+    -v ~/workdir:/workdir:Z --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+--> Still failed to pull image - sigh
+
+`podman run -it --rm --userns=keep-id:uid=1000,gid=1000 --cap-add=CAP_MKNOD --cap-add=NET_ADMIN --cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --device=/dev/fuse --security-opt="seccomp=unconfined" \
+    --security-opt="label=disable" --security-opt="apparmor=unconfined" --security-opt="unmask=/sys/fs/cgroup" \
+    -v ~/workdir:/workdir:Z --workdir /workdir registry.redhat.io/ansible-automation-platform-25/ansible-dev-tools-rhel8:latest`
+--> Woohoo! This works!
+
