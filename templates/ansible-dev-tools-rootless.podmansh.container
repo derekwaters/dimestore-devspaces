@@ -22,14 +22,28 @@ PodmanArgs=--security-opt="seccomp=unconfined"
 PodmanArgs=--security-opt="label=disable"
 PodmanArgs=--security-opt="apparmor=unconfined"
 PodmanArgs=--security-opt="unmask=/sys/fs/cgroup"
+# This line is required (using a preconfigured auth.json)
+# to provide authentication to the image registry for the
+# remote image.
+# PodmanArgs=--authfile="/etc/containers/auth.json"
 
 RunInit=yes
 Exec=sleep infinity
 
+# Host networking is required to establish the ssh tunnel
+# for using the container in VSCode remotely.
+# 
+Network=host
+
 Volume=%h/data:/workdir:Z
+
+# This mount point (and the ExecStartPre line below)
+# is needed to "cache" the VSCode ssh tunnel server components
+Volume=%h/.vscode-server:/home/podman/.vscode-server:Z
 
 [Service]
 ExecStartPre=/usr/bin/mkdir -p %h/data
+ExecStartPre=/usr/bin/mkdir -p %h/.vscode-server
 
 [Install]
 RequiredBy=default.target
